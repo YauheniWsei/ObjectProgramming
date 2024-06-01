@@ -1,0 +1,1436 @@
+﻿<Window x:Class="WpfAppTry5.Start1"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:svg="http://sharpvectors.codeplex.com"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:gif="clr-namespace:WpfAnimatedGif;assembly=WpfAnimatedGif"
+        xmlns:local="clr-namespace:WpfAppTry5" xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:svg1="http://sharpvectors.codeplex.com/svgc/"
+        mc:Ignorable="d"
+        Title="Start1" Height="600" Width="800"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None">
+    <Window.Resources>
+        <!-- Define styles for achievement items -->
+        <Style x:Key="AchievementItemStyle" TargetType="Border">
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Gray" BlurRadius="5" ShadowDepth="2"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="RenderTransform">
+                        <Setter.Value>
+                            <ScaleTransform ScaleX="1.05" ScaleY="1.05"/>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="BorderBrush" Value="#AD66D5"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Define a DataTemplate for the achievements -->
+        <DataTemplate x:Key="AchievementTemplate">
+            <Border Style="{StaticResource AchievementItemStyle}">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="{Binding Title}" FontSize="18" FontWeight="Bold" Foreground="#333333"/>
+                    <TextBlock Text="{Binding Description}" FontSize="14" Foreground="#666666"/>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+        <!-- Define styles and animations here -->
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Background" Value="#FFF"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="2"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ProfileButtonStyle" TargetType="Button">
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Background" Value="#007ACC"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" BlurRadius="5" ShadowDepth="2"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="Button" x:Key="MenuButtonStyle">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="Image" x:Key="MenuImageStyle">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="1"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Grid x:Name="MainRoot" Background="#ebedfc">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="45"/>
+            <RowDefinition Height="100*"/>
+        </Grid.RowDefinitions>
+
+
+        <!--Запись 19.04 
+            Цель на ближайшее время:
+        
+            Сперва нужно Сделать ещё несколько гридов, на которые переключают
+            кнопки из Радио, т.е. режимы. Просто сделай их и пока хватит.
+        
+            .... Переключай пока всё на грид проресса ....
+        
+            Разработать выбор языка при клике на Лэнгвич. Мб сделай так, чтобы
+            при клике выползало сверху вниз меню с выбором языка. 
+            Потом сделай соотвествующие гриды для каждого языка.
+            Можно пока оставить "В разработке" - один грид для каждого языка, который в разработке.
+        
+            После этого наверное следует пробовать как-то заполнять 
+            контентом уровни - разработать визуальную часть для уроков.
+            
+            Что точно будет немного запонено:
+            - Уровни для русского и английского языков (по 1 уроку на два уровня )
+            - Система флэшкартов общая для всего приложения - можно украсть идею с Quizlet
+            - Несколько достижений
+            - Текста для чтения
+            - Видеоуроки из ютуба 
+            Остальное - в разработке
+            -->
+        <!--OK-->
+        <Grid x:Name="Header" Grid.Row="0">
+            <Grid.Background>
+                <VisualBrush>
+                    <VisualBrush.Visual>
+                        <Image x:Name="GifHeader"
+                               gif:ImageBehavior.AnimatedSource="Images/pixelArt.gif"
+                               gif:ImageBehavior.AutoStart="True"
+                               gif:ImageBehavior.RepeatBehavior="1"
+                               gif:ImageBehavior.AnimationSpeedRatio="0.7"
+                               Width="800"                               
+                               Stretch="None"
+                               Height="35">
+                            <Image.Clip>
+                                <RectangleGeometry Rect="0, 0, 800, 35"/>
+                            </Image.Clip>
+                        </Image>
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Grid.Background>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100*"/>
+                <ColumnDefinition Width="100*"/>
+                <ColumnDefinition Width="100*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="NameOfAppTextInHeader" Text="Sky LERN"
+                       FontFamily="Silkscreen"
+                       Grid.Column="0"
+                       VerticalAlignment="Top"
+                       FontSize="24"
+                       Padding="10,0,0,0"
+                       Foreground="White"
+                       HorizontalAlignment="Left" MouseDown="NameOfAppTextInHeader_MouseDown" MouseEnter="NameOfAppTextInHeader_MouseEnter" MouseLeave="NameOfAppTextInHeader_MouseLeave"/>
+        </Grid>
+
+        <!-- 50/50 -->
+        <Grid x:Name="PanelWithProfileAndOther" Grid.Row="1" Background="#cfd8fc">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="95"/>
+                <ColumnDefinition Width="100*"/>
+                <ColumnDefinition Width="75"/>
+            </Grid.ColumnDefinitions>
+            <Button Style="{StaticResource MenuButtonStyle}" Grid.Column="6" Click="ButClose_Click" HorizontalAlignment="Right" Margin="0,0,8,0">
+                <Image Style="{StaticResource MenuImageStyle}" Source="Images/logOut.png" Width="35" Height="30"/>
+            </Button>
+            <!-- Кнопки в меню -->
+            <Button Style="{StaticResource MenuButtonStyle}" Grid.Column="0" Click="OpenLeftMenu_Click">
+                <Image Style="{StaticResource MenuImageStyle}" Source="Images/menuPNG.png" Width="30" Height="30"/>
+            </Button>
+            <TextBlock x:Name="LanguageInMenuPanel" Text="RUSSIAN"
+                       FontFamily="Josefin Sans"
+                       Grid.Column="1"
+                       VerticalAlignment="Top"
+                       HorizontalAlignment="Left"
+                       FontSize="36"
+                       Foreground="Black" Margin="0,15,0,0" MouseEnter="LanguageInMenuPanel_MouseEnter" MouseLeave="LanguageInMenuPanel_MouseLeave" MouseDown="LanguageInMenuPanel_MouseDown"/>
+        </Grid>
+
+        <!--W sumie OK-->
+        <Grid x:Name="LanguagesLvlMenu" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="140"/>
+                <ColumnDefinition Width="170"/>
+                <ColumnDefinition Width="190"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Rectangle x:Name="RectBegin" Fill="#afc8fa" Height="43" Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Center" Width="130" RadiusX="10" RadiusY="10" Margin="0,11,0,0" MouseDown="LangLvlBeginner_MouseDown" MouseEnter="RectBegin_MouseEnter" MouseLeave="RectBegin_MouseLeave" />
+            <Rectangle x:Name="RectElementary" Fill="#c2befa" Height="43" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Center" Width="160" RadiusX="10" RadiusY="10" Margin="0,11,0,0" MouseDown="RectElementary_MouseDown" MouseEnter="RectElementary_MouseEnter" MouseLeave="RectElementary_MouseLeave"/>
+            <Rectangle x:Name="RectInter" Fill="#c7f2fc" Height="43" VerticalAlignment="Top" Grid.Column="2" HorizontalAlignment="Center" Width="185" RadiusX="10" RadiusY="10" Margin="0,11,0,0" MouseDown="RectInter_MouseDown" MouseEnter="RectInter_MouseEnter" MouseLeave="RectInter_MouseLeave"/>
+            <Rectangle x:Name="RectUpInter" Fill="#fcebeb" Height="43" VerticalAlignment="Top" Grid.Column="3" HorizontalAlignment="Center" Width="280" RadiusX="10" RadiusY="10" Margin="0,11,0,0" MouseDown="RectUpInter_MouseDown" MouseEnter="RectUpInter_MouseEnter" MouseLeave="RectUpInter_MouseLeave"/>
+
+            <TextBlock x:Name="LangLvlBeginner" Text="Beginner"
+           FontFamily="Josefin Sans"
+           Grid.Column="0"
+           VerticalAlignment="Bottom"
+           HorizontalAlignment="Center"
+           FontSize="22"
+           Margin="0,0,0,5"
+           Foreground="Black" MouseEnter="LangLvlBeginner_MouseEnter" MouseLeave="LangLvlBeginner_MouseLeave" MouseDown="LangLvlBeginner_MouseDown">
+            </TextBlock>
+            <TextBlock x:Name="LangLvlElementary" Text="Elementary"
+                       FontFamily="Josefin Sans"
+                       Grid.Column="1"
+                       VerticalAlignment="Bottom"
+                       HorizontalAlignment="Center"
+                       FontSize="22"
+                       Margin="0,0,0,5"
+                       Foreground="Black" MouseEnter="LangLvlElementary_MouseEnter" MouseLeave="LangLvlElementary_MouseLeave" MouseDown="LangLvlElementary_MouseDown"/>
+            <TextBlock x:Name="LangLvlInter" Text="Intermediate"
+           FontFamily="Josefin Sans"
+           Grid.Column="2"
+           VerticalAlignment="Bottom"
+           HorizontalAlignment="Center"
+           FontSize="22"
+           Margin="0,0,0,5"
+           Foreground="Black" MouseEnter="LangLvlInter_MouseEnter" MouseLeave="LangLvlInter_MouseLeave" MouseDown="LangLvlInter_MouseDown"/>
+            <TextBlock x:Name="LangLvlUpInter" Text="Upper Intermediate"
+           FontFamily="Josefin Sans"
+           Grid.Column="3"
+           VerticalAlignment="Bottom"
+           HorizontalAlignment="Center"
+           FontSize="22"
+           Margin="0,0,0,5"
+           Foreground="Black" MouseEnter="LangLvlUpInter_MouseEnter" MouseLeave="LangLvlUpInter_MouseLeave" MouseDown="LangLvlUpInter_MouseDown"/>
+        </Grid>
+
+        <!--Czegoś brakuje, popatrzyć później-->
+        <Grid x:Name="StartMainMenu" Grid.Row="3" Background="#cfd8fc">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Image Source="Images/warning.png" Grid.Row="1" Height="30"
+                   Width="30"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Bottom"
+                   Margin="0,0,590,20"
+                   Opacity="0.5"/>
+            <TextBlock Text="You have not selected a language and/or level"
+                       FontFamily="Josefin Sans"
+                       Grid.Row="1"
+                       Margin="0,0,0,20"
+                       VerticalAlignment="Bottom"
+                       HorizontalAlignment="Center"
+                       FontSize="26"
+                       Foreground="Black"
+                       Opacity="0.5"/>
+            <TextBlock Grid.RowSpan="2" 
+                       VerticalAlignment="Center" 
+                       HorizontalAlignment="Center"
+                       FontSize="160"
+                       FontWeight="ExtraLight"
+                       Margin="40,0,0,90">
+                 &#123;
+            </TextBlock>
+            <TextBlock Grid.RowSpan="2" 
+                       VerticalAlignment="Center" 
+                       HorizontalAlignment="Center"
+                       FontSize="160"
+                       FontWeight="ExtraLight"
+                       Margin="460,0,0,90">
+                 &#125;
+            </TextBlock>
+            <TextBlock
+                       VerticalAlignment="Bottom" 
+                       HorizontalAlignment="Center" 
+                       Grid.Row="0"
+                       FontSize="42">
+                <Run Text="This  is  where  your  "/>
+                <Run Text="adventure  " 
+                     Foreground="White"/>
+                <Run Text="begins"/>
+            </TextBlock>
+            <TextBlock Text="story" 
+                       Foreground="Aqua"
+                       Margin="250,5,0,0"
+                       VerticalAlignment="Top" 
+                       HorizontalAlignment="Center" 
+                       Grid.Row="1"
+                       FontSize="42"/>
+            <TextBlock Text="training" 
+                       Foreground="HotPink"
+                       VerticalAlignment="Bottom" 
+                       HorizontalAlignment="Center" 
+                       FontSize="42"
+                       Margin="250,0,0,60"/>
+        </Grid>
+
+        <Grid x:Name="InProgress" Grid.Row="3" Background="Orange" Visibility="Hidden">
+            <TextBlock Text="Page In Progress" 
+                       FontSize="50"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Foreground="Black"/>
+        </Grid>
+
+        
+        <Grid x:Name="ProfileGridMenu" Grid.Row="3" Background="AliceBlue" Visibility="Hidden">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Statistics and Details Section -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Left Column - Profile Details -->
+                <StackPanel Grid.Column="0" Margin="10,10,0,0" >
+                    <Border Style="{StaticResource CardStyle}">
+                        <StackPanel >
+                            <TextBlock Text="Profile Details" FontFamily="Josefin Sans" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+                            <TextBlock x:Name="MachinName" Text="User: user@example.com" FontFamily="Josefin Sans" FontSize="16"/>
+                            <TextBlock x:Name="JoinDateTextBlock" Text="Joined: January 1, 2023" FontFamily="Josefin Sans" FontSize="16"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource CardStyle}">
+                        <StackPanel>
+                            <TextBlock x:Name="AchievementsInProfile" Text="Achievements" FontSize="20" FontFamily="Josefin Sans" FontWeight="Bold" Margin="0,0,0,10"/>
+                            <TextBlock x:Name="CompletedLess" Text="Completed: 20 Lessons" FontSize="16" FontFamily="Josefin Sans"/>
+                            <TextBlock x:Name="TotalTimeTextBlock" Text="Time Spent in App:" FontSize="16" Margin="0,0,0,10" FontFamily="Josefin Sans"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- Right Column - Additional Info -->
+                <StackPanel Grid.Column="1" Margin="10,10,10,0">
+                    <Border Style="{StaticResource CardStyle}">
+                        <StackPanel>
+                            <TextBlock Text="Language Learning Tips" FontFamily="Josefin Sans" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+                            <TextBlock Text="1. Practice daily to build a habit." FontFamily="Josefin Sans" FontSize="16" TextWrapping="Wrap" Margin="0,0,0,5"/>
+                            <TextBlock Text="2. Immerse yourself in the language with media." FontFamily="Josefin Sans" FontSize="16" TextWrapping="Wrap" Margin="0,0,0,5"/>
+                            <TextBlock Text="3. Use flashcards to improve vocabulary." FontFamily="Josefin Sans" FontSize="16" TextWrapping="Wrap" Margin="0,0,0,5"/>
+                            <TextBlock Text="4. Join a language learning community." FontFamily="Josefin Sans" FontSize="16" TextWrapping="Wrap" Margin="0,0,0,5"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource CardStyle}" Margin="0,10,0,0">
+                        <StackPanel>
+                            <TextBlock Text="Quotes" FontFamily="Josefin Sans" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+                            <TextBlock Text="The limits of my language mean the limits of my world. - Ludwig Wittgenstein" FontFamily="Josefin Sans" FontSize="16" TextWrapping="Wrap" Margin="0,0,0,15"/>
+                    <TextBlock Text="One language sets you in a corridor for life. Two languages open every door along the way. - Frank Smith" FontFamily="Josefin Sans" FontSize="16" TextWrapping="Wrap" Margin="0,0,0,15"/>
+                    <TextBlock Text="To learn a language is to have one more window from which to look at the world. - Chinese Proverb" FontFamily="Josefin Sans" FontSize="16" TextWrapping="Wrap" Margin="0,0,0,15"/>
+                </StackPanel>
+            </Border>
+
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <!--Puste-->
+        <Grid x:Name="AwardsGridMenu" Grid.Row="3" Background="#9E5BB5" Visibility="Hidden">
+            
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Achievements" FontSize="36" FontFamily="Josefin Sans" FontWeight="Bold" Foreground="White" Margin="20"/>
+
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl x:Name="AchievementsItemsControl" ItemTemplate="{StaticResource AchievementTemplate}" Margin="20"/>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+
+        
+        <Grid x:Name="HelpGridMenu" Grid.Row="3" Background="#AD66D5" Visibility="Hidden">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Border Style="{StaticResource CardStyle}" Opacity="0.9" Width="780" Height="160" Margin="0,0,0,80" Grid.RowSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center"></Border>
+
+            <TextBlock Text="Thank you for using our application!" 
+                       FontSize="44"
+                       FontFamily="Josefin Sans"
+                       VerticalAlignment="Top"
+                       HorizontalAlignment="Center"
+                       Margin="0,50,0,0"/>
+            <TextBlock Text="If you encounter any issues, please contact me!"
+                       FontSize="36"
+                       FontFamily="Josefin Sans"
+                       VerticalAlignment="Bottom"
+                       HorizontalAlignment="Center"
+                       Margin="0,20,0,0"/>
+            <TextBlock Text="All the links are below. Thank you."
+                       FontFamily="Josefin Sans"
+                       Grid.Row="2"
+                       Margin="0,20,0,0"
+                          FontSize="24"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Top"/>
+
+            <Button x:Name="LinkToFacebookBtn" Style="{StaticResource MenuButtonStyle}" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="60,0,0,20" Click="LinkToFacebookBtn_Click">
+                <Image x:Name="FBImage" Style="{StaticResource MenuImageStyle}" Source="Images/facebook.png" Width="50" Height="50" MouseEnter="FBImage_MouseEnter" MouseLeave="FBImage_MouseLeave"/>
+            </Button>
+            
+            <Button x:Name="LinkToTwiterBtn" Style="{StaticResource MenuButtonStyle}" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="200,0,0,20" Click="LinkToTwiterBtn_Click">
+                <Image x:Name="TRImage" Style="{StaticResource MenuImageStyle}" Source="Images/twitter.png" Width="50" Height="50" MouseEnter="TRImage_MouseEnter" MouseLeave="TRImage_MouseLeave"/>
+            </Button>
+                
+            <Button x:Name="LinkToGitHubBtn" Style="{StaticResource MenuButtonStyle}" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,80,20" Click="LinkToGitHubBtn_Click">
+                <Image x:Name="GHImage" Style="{StaticResource MenuImageStyle}" Source="Images/github.png" Width="50" Height="50" MouseEnter="GHImage_MouseEnter" MouseLeave="GHImage_MouseLeave"/>
+            </Button>
+            
+            <Button x:Name="LinkToTiktokBtn" Style="{StaticResource MenuButtonStyle}" Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,220,20" Click="LinkToTiktokBtn_Click">
+                <Image x:Name="TTImage" Style="{StaticResource MenuImageStyle}" Source="Images/tiktok.png" Width="50" Height="50" MouseEnter="TTImage_MouseEnter" MouseLeave="TTImage_MouseLeave"/>
+            </Button>
+
+        </Grid>
+
+        <Grid x:Name="BeginnerMenu" Grid.Row="3" Background="#afc8fa" Visibility="Hidden">
+            <Rectangle x:Name="RectLess1" Cursor="Hand" Fill="White" Opacity="0.6" VerticalAlignment="Top" Height="160" Margin="0,20,0,0" RadiusX="15" RadiusY="15" Width="780" MouseEnter="Rectangle_MouseEnter" MouseLeave="RectLess1_MouseLeave" MouseDown="RectLess1_MouseDown"/>
+            <Path Stroke="Black" StrokeThickness="1" Cursor="Hand" MouseDown="RectLess1_MouseDown" Margin="430,-78,-430,78" MouseEnter="Rectangle_MouseEnter" MouseLeave="RectLess1_MouseLeave">
+                <Path.Fill>
+                    <ImageBrush ImageSource="Images/alphabetImage.jpg"
+                            Viewport="0,0,1,1"
+                            ViewportUnits="RelativeToBoundingBox"
+                            Viewbox="0,0,1,1"
+                            ViewboxUnits="RelativeToBoundingBox" />
+                </Path.Fill>
+                <Path.Data>
+                    <PathGeometry>
+
+                        <PathFigure StartPoint="50,100">
+                            <LineSegment Point="353,100" />
+                            <LineSegment Point="353,255" />
+                            <LineSegment Point="110,255" />
+                            <LineSegment Point="50,100" />
+
+                        </PathFigure>
+                    </PathGeometry>
+                </Path.Data>
+            </Path>
+            <Border x:Name="BorderLess1" BorderBrush="Black" MouseDown="RectLess1_MouseDown" BorderThickness="5" VerticalAlignment="Top" Height="160" Margin="0,20,0,0" Width="780" CornerRadius="15" MouseEnter="Rectangle_MouseEnter" MouseLeave="RectLess1_MouseLeave"/>
+            <TextBlock Text="Alphabet and Reading Rules" VerticalAlignment="Top" MouseDown="RectLess1_MouseDown" Cursor="Hand" FontFamily="Josefin Sans" FontSize="36" Margin="20,30,0,0" MouseEnter="Rectangle_MouseEnter" MouseLeave="RectLess1_MouseLeave"/>
+            <TextBlock Text="In this lesson, you will start learning Russian!" MouseDown="RectLess1_MouseDown" Cursor="Hand"
+                       FontSize="24" VerticalAlignment="Top"
+                       FontFamily="Josefin Sans" Margin="20,100,0,0" MouseEnter="Rectangle_MouseEnter" MouseLeave="RectLess1_MouseLeave"/>
+            <TextBlock Text="Alphabet and basic grammar" MouseDown="RectLess1_MouseDown" Cursor="Hand"
+                       FontSize="24"  VerticalAlignment="Top"
+                       FontFamily="Josefin Sans" Margin="20,140,0,0" MouseEnter="Rectangle_MouseEnter" MouseLeave="RectLess1_MouseLeave">
+            </TextBlock>
+            <Line X1="480" Y1="21" X2="540" Y2="180" MouseDown="RectLess1_MouseDown" Stroke="Black" StrokeThickness="2" MouseEnter="Rectangle_MouseEnter" MouseLeave="RectLess1_MouseLeave"/>
+
+            <Rectangle x:Name="RectLess2" Cursor="Hand" MouseDown="BorderLess2_MouseDown" Fill="White" Opacity="0.6" VerticalAlignment="Top" Height="160" Margin="0,200,0,0" RadiusX="15" RadiusY="15" Width="780" MouseLeave="RectLess2_MouseLeave" MouseEnter="RectLess2_MouseEnter" />
+            <Path Stroke="Black" StrokeThickness="1" MouseDown="BorderLess2_MouseDown" Cursor="Hand" Margin="278,103,-190,-100" MouseLeave="RectLess2_MouseLeave" MouseEnter="RectLess2_MouseEnter" >
+                <Path.Fill>
+                    <ImageBrush ImageSource="Images/pro2.png"
+                Viewport="0,0,2,2"
+                ViewportUnits="RelativeToBoundingBox"
+                Viewbox="0,0,2,2"
+                ViewboxUnits="RelativeToBoundingBox" />
+                </Path.Fill>
+                <Path.Data>
+                    <PathGeometry>
+
+                        <PathFigure StartPoint="50,100">
+                            <LineSegment Point="505,100" />
+                            <LineSegment Point="505,255" />
+                            <LineSegment Point="145,255" />
+                            <LineSegment Point="87,100" />
+
+                        </PathFigure>
+                    </PathGeometry>
+                </Path.Data>
+            </Path>
+            <Border x:Name="BorderLess2" BorderBrush="Black" BorderThickness="4" VerticalAlignment="Top" Height="160" Margin="0,200,0,0" Width="780" CornerRadius="15" MouseLeave="RectLess2_MouseLeave" MouseEnter="RectLess2_MouseEnter" MouseDown="BorderLess2_MouseDown"/>
+            <TextBlock Cursor="Hand" MouseDown="BorderLess2_MouseDown" Text="Personal pronouns" FontFamily="Josefin Sans" FontSize="36" Margin="20,210,0,0" MouseLeave="RectLess2_MouseLeave" MouseEnter="RectLess2_MouseEnter" VerticalAlignment="Top"/>
+            <TextBlock Cursor="Hand" MouseDown="BorderLess2_MouseDown" Text="I, you, we, etc."  
+           FontSize="24" 
+           FontFamily="Josefin Sans" Margin="20,320,0,0" MouseLeave="RectLess2_MouseLeave" MouseEnter="RectLess2_MouseEnter" VerticalAlignment="Top">
+            </TextBlock>
+            <Line X1="240" Y1="200" X2="300" MouseDown="BorderLess2_MouseDown" Y2="360" Stroke="Black" StrokeThickness="2" MouseLeave="RectLess2_MouseLeave" MouseEnter="RectLess2_MouseEnter" Margin="123,0,-123,0"/>
+
+            <TextBlock Text="To be continued..." FontSize="26" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,10" Foreground="Gray"/>
+        </Grid>
+
+
+        <Grid x:Name="ElementaryMenu" Grid.Row="3" Background="#c2befa" Visibility="Hidden">
+            <Rectangle x:Name="RectLess1El" Cursor="Hand" Fill="White" Opacity="0.6" VerticalAlignment="Top" Height="160" Margin="0,20,0,0" RadiusX="15" RadiusY="15" Width="780" MouseEnter="RectLess1El_MouseEnter" MouseLeave="RectLess1El_MouseLeave" MouseDown="RectLess1El_MouseDown" />
+            <Path Stroke="Black" StrokeThickness="1" MouseDown="RectLess1El_MouseDown" Cursor="Hand"  Margin="291,-79,-203,82" MouseEnter="RectLess1El_MouseEnter" MouseLeave="RectLess1El_MouseLeave">
+                <Path.Fill>
+                    <ImageBrush ImageSource="Images/worrrd.png"
+    Viewport="0,0,2,2"
+    ViewportUnits="RelativeToBoundingBox"
+    Viewbox="0,0,2,2"
+    ViewboxUnits="RelativeToBoundingBox"  />
+                </Path.Fill>
+                <Path.Data>
+                    <PathGeometry>
+
+                        <PathFigure StartPoint="50,100">
+                            <LineSegment Point="490,100" />
+                            <LineSegment Point="490,257" />
+                            <LineSegment Point="147,257" />
+                            <LineSegment Point="89,100" />
+
+                        </PathFigure>
+                    </PathGeometry>
+                </Path.Data>
+            </Path>
+            <Border x:Name="BorderLess1El" MouseDown="RectLess1El_MouseDown" BorderBrush="Black" BorderThickness="4" VerticalAlignment="Top" Height="160" Margin="0,20,0,0" Width="780" CornerRadius="15" MouseEnter="RectLess1El_MouseEnter" MouseLeave="RectLess1El_MouseLeave"/>
+            <TextBlock Text="Compound sentences" MouseDown="RectLess1El_MouseDown" Cursor="Hand" FontFamily="Josefin Sans" FontSize="36" Margin="20,30,0,0" VerticalAlignment="Top" MouseEnter="RectLess1El_MouseEnter" MouseLeave="RectLess1El_MouseLeave"/>
+            <TextBlock Text="Elementary sentence construction"  MouseDown="RectLess1El_MouseDown" Cursor="Hand"
+           FontSize="24" Height="40" VerticalAlignment="Top"
+           FontFamily="Josefin Sans" Margin="20,140,0,0" MouseEnter="RectLess1El_MouseEnter" MouseLeave="RectLess1El_MouseLeave">
+            </TextBlock>
+            <Line X1="380" Y1="21" X2="440" Y2="180" MouseDown="RectLess1El_MouseDown" Stroke="Black" StrokeThickness="2" MouseEnter="RectLess1El_MouseEnter" MouseLeave="RectLess1El_MouseLeave"/>
+
+            <TextBlock Text="To be continued..." FontSize="26" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,10" Foreground="Gray"/>
+        </Grid>
+
+
+        <Grid x:Name="InterMenu" Grid.Row="3" Background="#c7f2fc" Visibility="Hidden">
+            <TextBlock Text="In Progress.." FontSize="40" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,40" Foreground="Gray"/>
+            <Image
+       gif:ImageBehavior.AnimatedSource="Images/mniamcat.gif"
+       gif:ImageBehavior.AutoStart="True"
+       gif:ImageBehavior.RepeatBehavior="1"
+       gif:ImageBehavior.AnimationSpeedRatio="0.7"
+                   Width="600"
+                   Height="200"
+                   Margin="0,250,0,0">
+
+            </Image>
+        </Grid>
+
+
+        <Grid x:Name="UpInterMenu" Grid.Row="3" Background="#fcebeb" Visibility="Hidden">
+            <TextBlock Text="In Progress.." FontSize="40" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,40" Foreground="Gray"/>
+            <Image
+gif:ImageBehavior.AnimatedSource="Images/mniamcat.gif"
+gif:ImageBehavior.AutoStart="True"
+gif:ImageBehavior.RepeatBehavior="1"
+gif:ImageBehavior.AnimationSpeedRatio="0.7"
+            Width="600"
+            Height="200"
+            Margin="0,250,0,0">
+
+            </Image>
+        </Grid>
+
+        <!--Troche źle wygląda, można spróbować dodać Rectangle. Szaro-->
+        <Grid x:Name="LeftMenu" Grid.Row="2" Grid.RowSpan="2" Panel.ZIndex="1" HorizontalAlignment="Left" Width="350" Height="480" Background="Transparent" Visibility="Hidden">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Rectangle Fill="#dee4fc" Height="480" Margin="-10,0,0,0" RadiusX="10" RadiusY="10" Grid.RowSpan="8" />
+            <Border BorderBrush="Black" BorderThickness="2" Height="480" Margin="-10,0,0,0" CornerRadius="10" Grid.RowSpan="8"/>
+
+            <Rectangle Fill="White" x:Name="rectProfile" Grid.Row="1" Cursor="Hand" RadiusX="15" RadiusY="15" Opacity="0.6" Height="50" Width="340" Margin="0,2,0,3" MouseDown="rectProfile_MouseDown" MouseEnter="rectProfile_MouseEnter" MouseLeave="rectProfile_MouseLeave"/>
+            <Line Grid.Row="1" X1="50" Y1="4.5" X2="50" Y2="54.6" Stroke="Black" Cursor="Hand" StrokeThickness="2" MouseDown="rectProfile_MouseDown" MouseEnter="rectProfile_MouseEnter" MouseLeave="rectProfile_MouseLeave"/>
+            <Border BorderBrush="Black" BorderThickness="2" Grid.Row="1" CornerRadius="15" Cursor="Hand" Height="50" Width="340" Margin="0,2,0,3" MouseDown="rectProfile_MouseDown" MouseEnter="rectProfile_MouseEnter" MouseLeave="rectProfile_MouseLeave"/>
+
+            <Rectangle Fill="White" x:Name="rectRewards" Grid.Row="2" RadiusX="15" RadiusY="15" Cursor="Hand" Opacity="0.6" Height="50" Width="340" Margin="0,2,0,3" MouseDown="rectRewards_MouseDown" MouseEnter="rectRewards_MouseEnter" MouseLeave="rectRewards_MouseLeave"/>
+            <Line Grid.Row="2" X1="50" Y1="4.5" X2="50" Y2="54.6" Stroke="Black" Cursor="Hand" StrokeThickness="2" MouseDown="rectRewards_MouseDown" MouseEnter="rectRewards_MouseEnter" MouseLeave="rectRewards_MouseLeave"/>
+            <Border BorderBrush="Black" BorderThickness="2" Grid.Row="2" CornerRadius="15" Cursor="Hand" Height="50" Width="340" Margin="0,2,0,3" MouseDown="rectRewards_MouseDown" MouseEnter="rectRewards_MouseEnter" MouseLeave="rectRewards_MouseLeave"/>
+
+            <Rectangle Fill="White" x:Name="rectHelp" Grid.Row="3" RadiusX="15" Cursor="Hand" RadiusY="15" Opacity="0.6" Height="50" Width="340" Margin="0,2,0,3" MouseDown="rectHelp_MouseDown" MouseEnter="rectHelp_MouseEnter" MouseLeave="rectHelp_MouseLeave"/>
+            <Line Grid.Row="3" X1="50" Y1="4.5" X2="50" Y2="54.6" Stroke="Black" Cursor="Hand" StrokeThickness="2" MouseDown="rectHelp_MouseDown" MouseEnter="rectHelp_MouseEnter" MouseLeave="rectHelp_MouseLeave"/>
+            <Border BorderBrush="Black" BorderThickness="2" Grid.Row="3" CornerRadius="15" Cursor="Hand" Height="50" Width="340" Margin="0,2,0,3" MouseDown="rectHelp_MouseDown" MouseEnter="rectHelp_MouseEnter" MouseLeave="rectHelp_MouseLeave"/>
+
+            <Rectangle Fill="White" x:Name="lessRadioRect" Cursor="Hand" Grid.Row="5" RadiusX="15" RadiusY="15" Opacity="0.6" Height="50" HorizontalAlignment="Left" Width="180" Margin="0,2,5,3" MouseDown="lessRadioRect_MouseDown"/>
+            <Border BorderBrush="Black" BorderThickness="2" Grid.Row="5" CornerRadius="15" Height="50" Width="180" HorizontalAlignment="Left" Margin="0,2,5,3"/>
+
+            <Rectangle Fill="White" x:Name="readRadioRect" Cursor="Hand" Grid.Row="6" RadiusX="15" RadiusY="15" Opacity="0.6" Height="50" HorizontalAlignment="Left" Width="180" Margin="0,2,5,3" MouseDown="readRadioRect_MouseDown"/>
+            <Border BorderBrush="Black" BorderThickness="2" Grid.Row="6" CornerRadius="15" Height="50" Width="180" HorizontalAlignment="Left" Margin="0,2,5,3"/>
+
+            <Rectangle Fill="White" x:Name="videoRadioRect" Cursor="Hand" Grid.Row="7" RadiusX="15" RadiusY="15" Opacity="0.6" Height="50" HorizontalAlignment="Left" Width="180" Margin="0,2,5,3" MouseDown="videoRadioRect_MouseDown"/>
+            <Border BorderBrush="Black" BorderThickness="2" Grid.Row="7" CornerRadius="15" Height="50" Width="180" HorizontalAlignment="Left" Margin="0,2,5,3"/>
+
+            <TextBlock x:Name="SettingsTextInPanel"
+                          Text="Settings"
+                          FontFamily="Jersey 10"
+                          Grid.Row="0"
+                          VerticalAlignment="Center"
+                          HorizontalAlignment="Center"
+                          FontSize="40"
+                          Margin="0,0,0,5"
+                          Foreground="Black"/>
+            <Grid x:Name="ProfileGrid" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="55"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Style="{StaticResource MenuButtonStyle}" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" MouseDown="rectProfile_MouseDown" MouseEnter="rectProfile_MouseEnter" MouseLeave="rectProfile_MouseLeave" VerticalAlignment="Center" Click="ButtonProfile_Click">
+                    <Image Style="{StaticResource MenuImageStyle}" Source="Images/profile.png" Width="30" Height="30"/>
+                </Button>
+                <TextBlock x:Name="ProfileTextInSettings"
+                           Text="Profile"
+                           FontFamily="Josefin Sans"
+                           Grid.Row="1"
+                           Grid.Column="1"
+                           Cursor="Hand"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left"
+                           FontSize="34"
+                           Padding="20,0,0,0"
+                           Foreground="Black" MouseEnter="ProfileTextInSettings_MouseEnter" MouseLeave="ProfileTextInSettings_MouseLeave" MouseDown="rectProfile_MouseDown"/>
+            </Grid>
+            <Grid x:Name="AchievementsGrid" Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="55"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Style="{StaticResource MenuButtonStyle}" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Click="ButtonRewards_Click" MouseDown="rectRewards_MouseDown" MouseEnter="rectRewards_MouseEnter" MouseLeave="rectRewards_MouseLeave">
+                    <Image Style="{StaticResource MenuImageStyle}" Source="Images/rewards.png" Width="30" Height="30"/>
+                </Button>
+                <TextBlock x:Name="AchievementsTextInSettings"
+                           Text="Achievements"
+                           FontFamily="Josefin Sans"
+                           Grid.Row="2"
+                           Grid.Column="1"
+                           Cursor="Hand"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left"
+                           FontSize="34"
+                           Padding="20,0,0,0"
+                           Foreground="Black" MouseEnter="AchievementsTextInSettings_MouseEnter" MouseLeave="AchievementsTextInSettings_MouseLeave" MouseDown="AchievementsTextInSettings_MouseDown"/>
+            </Grid>
+            <Grid x:Name="HelpGrid" Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="55"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Style="{StaticResource MenuButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Click="ButtonHelp_Click" MouseDown="rectHelp_MouseDown" MouseEnter="rectHelp_MouseEnter" MouseLeave="rectHelp_MouseLeave">
+                    <Image Style="{StaticResource MenuImageStyle}" Source="Images/Question.png" Width="30" Height="30"/>
+                </Button>
+                <TextBlock x:Name="HelpTextInSettings"
+                           Text="Help"
+                           FontFamily="Josefin Sans"
+                           Grid.Row="3"
+                           Grid.Column="1"
+                           Cursor="Hand"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left"
+                           FontSize="34"
+                           Padding="20,0,0,0"
+                           Foreground="Black" MouseEnter="HelpTextInSettings_MouseEnter" MouseLeave="HelpTextInSettings_MouseLeave" MouseDown="HelpTextInSettings_MouseDown"/>
+            </Grid>
+            <TextBlock x:Name="ModeTextInSettings"
+                Text="Mode"
+                FontFamily="Jersey 10"
+                Grid.Row="4"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                FontSize="40"
+                Foreground="Black"/>
+            <RadioButton x:Name="RadioLessons"
+                         GroupName="ModeEducation"
+                         Content="Lessons"
+                         Margin="10,0,0,0"
+                         Cursor="Hand"
+                         HorizontalAlignment="Left"
+                         VerticalAlignment="Center"
+                         HorizontalContentAlignment="Left"
+                         VerticalContentAlignment="Center"
+                         Grid.Row="5"
+                         FontFamily="Josefin Sans"
+                         FontSize="34"
+                         IsChecked="True" Click="RadioLessons_Click"/>
+
+            <RadioButton x:Name="RadioReading"
+                         GroupName="ModeEducation"
+                         Content="Reading"
+                         Cursor="Hand"
+                         Margin="10,0,0,0"
+                         HorizontalAlignment="Left"
+                         VerticalAlignment="Center"
+                         HorizontalContentAlignment="Left"
+                         VerticalContentAlignment="Center"
+                         Grid.Row="6"
+                         FontFamily="Josefin Sans"
+                         FontSize="34" Click="RadioReading_Click"/>
+
+            <RadioButton x:Name="RadioVideo"
+                         GroupName="ModeEducation"
+                         Content="Video"
+                         Margin="10,0,0,0"
+                         Cursor="Hand"
+                         HorizontalAlignment="Left"
+                         VerticalAlignment="Center"
+                         HorizontalContentAlignment="Left"
+                         VerticalContentAlignment="Center"
+                         Grid.Row="7"
+                         FontFamily="Josefin Sans"
+                         FontSize="34" Click="RadioVideo_Click"/>
+        </Grid>
+
+        <Grid x:Name="VideoLessonsGrid" Grid.Row="3" Visibility="Hidden" Background="#afc8fa">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Rectangle Fill="White" x:Name="RectLess1Vid" RadiusX="15" RadiusY="15" Opacity="0.6" Height="400" Width="230" Margin="0,0,0,0" Grid.RowSpan="2" />
+
+            <Rectangle Fill="White" x:Name="RectLess2Vid" RadiusX="15" RadiusY="15" Opacity="0.6" Height="400" Width="230" Margin="0,0,0,0" Grid.RowSpan="2" Grid.Column="1"/>
+
+            <Rectangle Fill="White" x:Name="RectLess3Vid" RadiusX="15" RadiusY="15" Opacity="0.6" Height="400" Width="230" Margin="0,0,0,0" Grid.RowSpan="2" Grid.Column="2" />
+
+            <TextBlock Text="Russian alphabet" FontSize="26" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,30,0,0"/>
+            <StackPanel Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom" Margin="0,0,0,20" Width="200" Cursor="Hand" Height="120">
+                <Button x:Name="BtnYoutube1" Background="Transparent" Click="BtnYoutube1_Click"  >
+                    <Button.Content>
+                        <Grid>
+                            <Image Source="Images/youtube1.png" Stretch="Fill" Width="200" Height="120"/>
+                        </Grid>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+
+            <Border Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom" Margin="0,0,0,17.5" Width="205" Height="125" CornerRadius="7" BorderThickness="5" BorderBrush="Black"/>
+
+            <TextBlock Text="Russian frases" FontSize="26" VerticalAlignment="Top" Grid.Column="1" HorizontalAlignment="Center" Margin="0,30,0,0" Cursor=""/>
+            <StackPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" Margin="0,0,0,20" Width="200" Cursor="Hand" Height="120">
+                <Button x:Name="BtnYoutube2" Background="Transparent" Click="BtnYoutube2_Click">
+                    <Button.Content>
+                        <Grid>
+                            <Image Source="Images/youtube2.png" Stretch="Fill" Width="200" Height="120"/>
+                        </Grid>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+
+            <Border Grid.Column="1" Grid.Row="0" VerticalAlignment="Bottom" Margin="0,0,0,17.5" Width="205" Height="125" CornerRadius="7" BorderThickness="5" BorderBrush="Black"/>
+
+            <TextBlock Text="Russian grammar" FontSize="26" VerticalAlignment="Top" Grid.Column="2" HorizontalAlignment="Center" Margin="0,30,0,0"/>
+
+            <StackPanel Grid.Row="0" Grid.Column="2" VerticalAlignment="Bottom" Margin="0,0,0,20" Width="200" Cursor="Hand" Height="120">
+                <Button x:Name="BtnYoutube3" Background="Transparent" Click="BtnYoutube3_Click">
+                    <Button.Content>
+                        <Grid>
+                            <Image Source="Images/youtube3.png" Stretch="Fill" Width="200" Height="120"/>
+                        </Grid>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+
+            <Border Grid.Column="2" Grid.Row="0" VerticalAlignment="Bottom" Margin="0,0,0,17.5" Width="205" Height="125" CornerRadius="7" BorderThickness="5" BorderBrush="Black"/>
+
+            <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="0,0,0,20" Width="200" Cursor="Hand" Height="120">
+                <Button x:Name="BtnYoutube4" Background="Transparent" Click="BtnYoutube4_Click">
+                    <Button.Content>
+                        <Grid>
+                            <Image Source="Images/BtnYT5.png" Stretch="Fill" Width="200" Height="120"/>
+                        </Grid>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+
+            <Border Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Margin="0,0,0,17.5" Width="205" Height="125" CornerRadius="7" BorderThickness="5" BorderBrush="Black"/>
+
+            <StackPanel Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,0,20" Width="200" Cursor="Hand" Height="120">
+                <Button x:Name="BtnYoutube5" Background="Transparent" Click="BtnYoutube5_Click">
+                    <Button.Content>
+                        <Grid>
+                            <Image Source="Images/BtnYT4.png" Stretch="Fill" Width="200" Height="120"/>
+                        </Grid>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+
+            <Border Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Margin="0,0,0,17.5" Width="205" Height="125" CornerRadius="7" BorderThickness="5" BorderBrush="Black"/>
+
+            <StackPanel Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Margin="0,0,0,20" Width="200" Cursor="Hand" Height="120">
+                <Button x:Name="BtnYoutube6" Background="Transparent" Click="BtnYoutube6_Click">
+                    <Button.Content>
+                        <Grid>
+                            <Image Source="Images/BtnYT6.png" Stretch="Fill" Width="200" Height="120"/>
+                        </Grid>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+
+            <Border Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" Margin="0,0,0,17.5" Width="205" Height="125" CornerRadius="7" BorderThickness="5" BorderBrush="Black"/>
+
+
+        </Grid>
+
+        <Grid x:Name="VideoLessonsElGrid" Grid.Row="3" Visibility="Hidden" Background="#c2befa">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Rectangle Fill="White" x:Name="RectLess1VidEL" RadiusX="15" RadiusY="15" Opacity="0.6" Height="400" Width="230" Margin="0,30,0,0" Grid.RowSpan="2" />
+
+            <Rectangle Fill="White" x:Name="RectLess2VidEL" RadiusX="15" RadiusY="15" Opacity="0.6" Height="400" Width="230" Margin="0,30,0,0" Grid.RowSpan="2" Grid.Column="1"/>
+
+            <Rectangle Fill="White" x:Name="RectLess3VidEL" RadiusX="15" RadiusY="15" Opacity="0.6" Height="400" Width="230" Margin="0,30,0,0" Grid.RowSpan="2" Grid.Column="2" />
+
+            <StackPanel Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom" Margin="0,0,0,20" Width="200" Cursor="Hand" Height="120">
+                <Button x:Name="BtnYoutube1El" Background="Transparent" Click="BtnYoutube1El_Click"  >
+                    <Button.Content>
+                        <Grid>
+                            <Image Source="Images/YT1el.png" Stretch="Fill" Width="200" Height="120"/>
+                        </Grid>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+
+            <Border Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom" Margin="0,0,0,17.5" Width="205" Height="125" CornerRadius="7" BorderThickness="5" BorderBrush="Black"/>
+
+            <StackPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" Margin="0,0,0,20" Width="200" Cursor="Hand" Height="120">
+                <Button x:Name="BtnYoutube2El" Background="Transparent" Click="BtnYoutube2El_Click">
+                    <Button.Content>
+                        <Grid>
+                            <Image Source="Images/YT3el.png" Stretch="Fill" Width="200" Height="120"/>
+                        </Grid>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+
+            <Border Grid.Column="1" Grid.Row="0" VerticalAlignment="Bottom" Margin="0,0,0,17.5" Width="205" Height="125" CornerRadius="7" BorderThickness="5" BorderBrush="Black"/>
+
+
+            <StackPanel Grid.Row="0" Grid.Column="2" VerticalAlignment="Bottom" Margin="0,0,0,20" Width="200" Cursor="Hand" Height="120">
+                <Button x:Name="BtnYoutube3El" Background="Transparent" Click="BtnYoutube3El_Click">
+                    <Button.Content>
+                        <Grid>
+                            <Image Source="Images/YT2el.png" Stretch="Fill" Width="200" Height="120"/>
+                        </Grid>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+
+            <Border Grid.Column="2" Grid.Row="0" VerticalAlignment="Bottom" Margin="0,0,0,17.5" Width="205" Height="125" CornerRadius="7" BorderThickness="5" BorderBrush="Black"/>
+
+            <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="0,0,0,20" Width="200" Cursor="Hand" Height="120">
+                <Button x:Name="BtnYoutube4El" Background="Transparent" Click="BtnYoutube4El_Click">
+                    <Button.Content>
+                        <Grid>
+                            <Image Source="Images/YT4el.png" Stretch="Fill" Width="200" Height="120"/>
+                        </Grid>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+
+            <Border Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Margin="0,0,0,17.5" Width="205" Height="125" CornerRadius="7" BorderThickness="5" BorderBrush="Black"/>
+
+            <StackPanel Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,0,20" Width="200" Cursor="Hand" Height="120">
+                <Button x:Name="BtnYoutube5El" Background="Transparent" Click="BtnYoutube5El_Click">
+                    <Button.Content>
+                        <Grid>
+                            <Image Source="Images/YT5el.png" Stretch="Fill" Width="200" Height="120"/>
+                        </Grid>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+
+            <Border Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Margin="0,0,0,17.5" Width="205" Height="125" CornerRadius="7" BorderThickness="5" BorderBrush="Black"/>
+
+            <StackPanel Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Margin="0,0,0,20" Width="200" Cursor="Hand" Height="120">
+                <Button x:Name="BtnYoutube6El" Background="Transparent" Click="BtnYoutube6El_Click">
+                    <Button.Content>
+                        <Grid>
+                            <Image Source="Images/YT6el.png" Stretch="Fill" Width="200" Height="120"/>
+                        </Grid>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+
+            <Border Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" Margin="0,0,0,17.5" Width="205" Height="125" CornerRadius="7" BorderThickness="5" BorderBrush="Black"/>
+
+        </Grid>
+        <Grid x:Name="ReadingGridBeginner" Grid.Row="3" Visibility="Hidden" Background="#afc8fa">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Button x:Name="medved_btn_text" Width="300" Height="100" Cursor="Hand" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Click="medved_btn_text_Click">
+                <Image Source="Images\medved.png" Stretch="Fill"></Image>
+            </Button>
+            <Border BorderBrush="Black" BorderThickness="5" VerticalAlignment="Center" Height="110" Cursor="Hand" Width="310" CornerRadius="15" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center"/>
+
+            <Button x:Name="gorod_btn_text" Width="300" Height="100" Cursor="Hand" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Click="gorod_btn_text_Click">
+                <Image Source="Images\gorod.png" Stretch="Fill"></Image>
+            </Button>
+            <Border BorderBrush="Black" BorderThickness="5" VerticalAlignment="Center" Height="110" Cursor="Hand" Width="310" CornerRadius="15" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center"/>
+
+            <Button x:Name="piter_btn_text" Width="300" Height="100" Cursor="Hand" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Click="gorod_btn_text_Click">
+                <Image Source="Images\piter.png" Stretch="Fill"></Image>
+            </Button>
+            <Border BorderBrush="Black" BorderThickness="5" VerticalAlignment="Center" Height="110" Cursor="Hand" Width="310" CornerRadius="15" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center"/>
+
+            <Button x:Name="banya_btn_text" Width="300" Height="100" Cursor="Hand" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Click="gorod_btn_text_Click">
+                <Image Source="Images\banya.png" Stretch="Fill"></Image>
+            </Button>
+            <Border BorderBrush="Black" BorderThickness="5" VerticalAlignment="Center" Height="110" Cursor="Hand" Width="310" CornerRadius="15" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center"/>
+
+        </Grid>
+        <Grid x:Name="ReadingGridEl" Grid.Row="3" Visibility="Hidden" Background="#c2befa" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Button x:Name="ploshad_btn_text" Width="300" Height="100" Cursor="Hand" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Click="ploshad_btn_text_Click">
+                <Image Source="Images\ploshad.png" Stretch="Fill"></Image>
+            </Button>
+            <Border BorderBrush="Black" BorderThickness="5" VerticalAlignment="Center" Height="110" Cursor="Hand" Width="310" CornerRadius="15" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center"/>
+
+            <Button x:Name="ghost_btn_text" Width="300" Height="100" Cursor="Hand" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Click="ghost_btn_text_Click">
+                <Image Source="Images\ghost.png" Stretch="Fill"></Image>
+            </Button>
+            <Border BorderBrush="Black" BorderThickness="5" VerticalAlignment="Center" Height="110" Cursor="Hand" Width="310" CornerRadius="15" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center"/>
+
+            <Button x:Name="cat_btn_text" Width="300" Height="100" Cursor="Hand" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Click="cat_btn_text_Click">
+                <Image Source="Images\cat.png" Stretch="Fill"></Image>
+            </Button>
+            <Border BorderBrush="Black" BorderThickness="5" VerticalAlignment="Center" Height="110" Cursor="Hand" Width="310" CornerRadius="15" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center"/>
+
+            <Button x:Name="footbal_btn_text" Width="300" Height="100" Cursor="Hand" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Click="footbal_btn_text_Click">
+                <Image Source="Images\footbal.png" Stretch="Fill"></Image>
+            </Button>
+            <Border BorderBrush="Black" BorderThickness="5" VerticalAlignment="Center" Height="110" Cursor="Hand" Width="310" CornerRadius="15" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center"/>
+
+        </Grid>
+        
+        <Grid x:Name="Lesson_1_Alphabet" Grid.Row="1" Grid.RowSpan="3" Background="AliceBlue" Visibility="Hidden">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" FontFamily="Josefin Sans">
+                <StackPanel Margin="20">
+                    <!-- Title -->
+                    <TextBlock FontSize="24" FontWeight="Bold" Text="Lesson 1: Introduction to the Russian Alphabet" Margin="0,0,0,20" TextAlignment="Center"/>
+
+                    <!-- Introduction -->
+                    <TextBlock FontSize="20" Text="Introduction" FontWeight="Bold" Margin="0,0,0,10"/>
+                    <TextBlock FontSize="18" TextWrapping="Wrap">
+                The Russian alphabet, known as the Cyrillic alphabet, consists of 33 letters. It was developed in the 9th century and has been used in Russia and several other countries. The Cyrillic alphabet is derived from the Greek alphabet and includes additional letters to represent sounds specific to the Russian language.
+                    </TextBlock>
+
+                    <!-- Alphabet Table -->
+                    <TextBlock FontSize="20" Text="The Russian Alphabet" FontWeight="Bold" Margin="20,20,0,10"/>
+                    <Grid Margin="0,0,0,20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="150"/>
+                        </Grid.ColumnDefinitions>
+
+
+                        <TextBlock FontSize="18" Text="А а" Grid.Row="0" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="A" Grid.Row="0" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;a&quot; in &quot;father&quot;" Grid.Row="0" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Б б" Grid.Row="1" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="B" Grid.Row="1" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;b&quot; in &quot;bat&quot;" Grid.Row="1" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="В в" Grid.Row="2" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="V" Grid.Row="2" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;v&quot; in &quot;van&quot;" Grid.Row="2" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Г г" Grid.Row="3" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="G" Grid.Row="3" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;g&quot; in &quot;go&quot;" Grid.Row="3" Grid.Column="2"/>
+
+                        <TextBlock Text="Д д" FontSize="18" Grid.Row="4" Grid.Column="0"/>
+                        <TextBlock Text="D" Grid.Row="4" FontSize="18" Grid.Column="1"/>
+                        <TextBlock Text="&quot;d&quot; in &quot;dog&quot;" FontSize="18" Grid.Row="4" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Е е" Grid.Row="5" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="E" Grid.Row="5" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;ye&quot; in &quot;yes&quot;" Grid.Row="5" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Ё ё" Grid.Row="6" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="Yo" Grid.Row="6" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;yo&quot; in &quot;yoga&quot;" Grid.Row="6" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Ж ж" Grid.Row="7" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="Zh" Grid.Row="7" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;s&quot; in &quot;measure&quot;" Grid.Row="7" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="З з" Grid.Row="8" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="Z" Grid.Row="8" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;z&quot; in &quot;zoo&quot;" Grid.Row="8" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="И и" Grid.Row="9" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="I" Grid.Row="9" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;ee&quot; in &quot;see&quot;" Grid.Row="9" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Й й" Grid.Row="10" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="Y" Grid.Row="10" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;y&quot; in &quot;boy&quot;" Grid.Row="10" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="К к" Grid.Row="11" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="K" Grid.Row="11" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;k&quot; in &quot;kite&quot;" Grid.Row="11" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Л л" Grid.Row="12" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="L" Grid.Row="12" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;l&quot; in &quot;lamp&quot;" Grid.Row="12" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="М м" Grid.Row="13" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="M" Grid.Row="13" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;m&quot; in &quot;man&quot;" Grid.Row="13" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Н н" Grid.Row="14" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="N" Grid.Row="14" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;n&quot; in &quot;net&quot;" Grid.Row="14" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="О о" Grid.Row="15" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="O" Grid.Row="15" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;o&quot; in &quot;not&quot;" Grid.Row="15" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="П п" Grid.Row="16" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="P" Grid.Row="16" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;p&quot; in &quot;pot&quot;" Grid.Row="16" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Р р" Grid.Row="17" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="R" Grid.Row="17" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="Rolled &quot;r&quot;" Grid.Row="17" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="С с" Grid.Row="18" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="S" Grid.Row="18" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;s&quot; in &quot;see&quot;" Grid.Row="18" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Т т" Grid.Row="19" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="T" Grid.Row="19" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;t&quot; in &quot;top&quot;" Grid.Row="19" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="У у" Grid.Row="20" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="U" Grid.Row="20" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;oo&quot; in &quot;boot&quot;" Grid.Row="20" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Ф ф" Grid.Row="21" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="F" Grid.Row="21" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;f&quot; in &quot;fun&quot;" Grid.Row="21" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Х х" Grid.Row="22" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="Kh" Grid.Row="22" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;ch&quot; in &quot;Bach&quot; (German) or &quot;loch&quot; (Scottish)" Grid.Row="22" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Ц ц" Grid.Row="23" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="Ts" Grid.Row="23" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;ts&quot; in &quot;cats&quot;" Grid.Row="23" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Ч ч" Grid.Row="24" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="Ch" Grid.Row="24" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;ch&quot; in &quot;church&quot;" Grid.Row="24" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Ш ш" Grid.Row="25" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="Sh" Grid.Row="25" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;sh&quot; in &quot;shoe&quot;" Grid.Row="25" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Щ щ" Grid.Row="26" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="Shch" Grid.Row="26" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;sh&quot; in &quot;sheer&quot;" Grid.Row="26" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Ы ы" Grid.Row="27" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="Y" Grid.Row="27" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="Similar to &quot;i&quot; in &quot;bit&quot; but deeper" Grid.Row="27" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Э э" Grid.Row="28" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="E" Grid.Row="28" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;e&quot; in &quot;met&quot;" Grid.Row="28" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Ю ю" Grid.Row="29" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="Yu" Grid.Row="29" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;u&quot; in &quot;universe&quot;" Grid.Row="29" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Я я" Grid.Row="30" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="Ya" Grid.Row="30" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="&quot;ya&quot; in &quot;yard&quot;" Grid.Row="30" Grid.Column="2"/>
+
+                    </Grid>
+
+                    <Button x:Name="ImageWithAlphabetBtn" Width="430" Height="300" Cursor="Hand" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.RowSpan="10" Margin="260,-700,0,0" Click="ImageWithAlphabetBtn_Click" MouseEnter="ImageWithAlphabetBtn_MouseEnter" MouseLeave="ImageWithAlphabetBtn_MouseLeave">
+                        <Image Source="Images\alphabetimage.jpg" Stretch="Fill"></Image>
+                    </Button>
+                    <TextBlock Text="You can click here" Opacity="0.5" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.RowSpan="10" Margin="0,-355,190,0"/>
+
+                    <!-- Reading in Russian -->
+                    <TextBlock FontSize="20" Text="Reading in Russian" FontWeight="Bold" Margin="20,20,0,10"/>
+                    <TextBlock FontSize="18" TextWrapping="Wrap">
+                When reading in Russian, it is essential to pay attention to stress, as the pronunciation of vowels can change based on whether they are stressed or not. Additionally, the Russian language uses both hard and soft consonants, which can slightly alter the pronunciation of the letters.
+                    </TextBlock>
+                    <TextBlock FontSize="18" FontWeight="Bold" Text="1. Stressed vs. Unstressed Vowels:" Margin="10,10,0,0"/>
+                    <TextBlock FontSize="18" TextWrapping="Wrap" Margin="10,0,0,0">
+                Stressed vowels are pronounced clearly and distinctly. Unstressed vowels may sound softer or different.
+                    </TextBlock>
+                    <TextBlock FontSize="18" FontWeight="Bold" Text="2. Hard and Soft Consonants:" Margin="10,10,0,0"/>
+                    <TextBlock FontSize="18" TextWrapping="Wrap" Margin="10,0,0,20">
+                Some consonants have a &quot;soft&quot; variant, which is indicated by the presence of a soft sign (ь) or by the following vowel.
+                    </TextBlock>
+
+                    <!-- Example Words -->
+                    <TextBlock FontSize="20" Text="Example Words" FontWeight="Bold" Margin="20,20,0,10"/>
+                    <TextBlock FontSize="18" TextWrapping="Wrap" Margin="0,0,0,20">
+                Here are a few example words with their pronunciation:
+                    </TextBlock>
+                    <TextBlock FontSize="18" Margin="10,0,0,0">1. Мама (Mama) - &quot;mama&quot;</TextBlock>
+                    <TextBlock FontSize="18" Margin="10,0,0,0">2. Папа (Papa) - &quot;papa&quot;</TextBlock>
+                    <TextBlock FontSize="18" Margin="10,0,0,0">3. Дом (Dom) - &quot;house&quot;</TextBlock>
+                    <TextBlock FontSize="18" Margin="10,0,0,0">4. Кот (Kot) - &quot;cat&quot;</TextBlock>
+                    <TextBlock FontSize="18" Margin="10,0,0,0">5. Собака (Sobaka) - &quot;dog&quot;</TextBlock>
+
+                    <!-- Conclusion -->
+                    <TextBlock FontSize="20" Text="Conclusion" FontWeight="Bold" Margin="20,20,0,10"/>
+                    <TextBlock FontSize="18" TextWrapping="Wrap" Margin="0,0,0,20">
+                In this lesson, you have learned about the Russian alphabet, its letters, and their English equivalents. Understanding these basics is the first step in learning to read and write in Russian. Practice pronouncing each letter and familiarize yourself with the sounds to build a strong foundation for further lessons.
+                    </TextBlock>
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                    <!--Button It's done!-->
+                    <TextBlock x:Name="BtnItsDone" Text="It's done!"
+                               Grid.Row="0"
+                               Margin="0,20,0,20"
+                   FontFamily="Silkscreen"
+                   FontSize="30"
+                   Foreground="Black"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Cursor="Hand" MouseDown="BtnItsDone_MouseDown" MouseEnter="BtnItsDone_MouseEnter" MouseLeave="BtnItsDone_MouseLeave"/>
+                    </Grid>
+
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+
+        <Grid x:Name="Lesson_2_PersonalPronouns" Grid.Row="1" Grid.RowSpan="3" Background="AliceBlue" Visibility="Hidden">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" FontFamily="Josefin Sans">
+                <StackPanel Margin="20">
+                    <!-- Title -->
+                    <TextBlock FontSize="24" FontWeight="Bold" Text="Lesson 1: Personal Pronouns in Russian" Margin="0,0,0,20" TextAlignment="Center"/>
+
+                    <!-- Introduction -->
+                    <TextBlock FontSize="20" Text="Introduction" FontWeight="Bold" Margin="0,0,0,10"/>
+                    <TextBlock FontSize="18" TextWrapping="Wrap">
+                In this lesson, you will learn about personal pronouns in Russian. Personal pronouns are used to refer to specific people or things. Understanding these pronouns is essential for constructing sentences and communicating effectively in Russian.
+                    </TextBlock>
+
+                    <!-- Personal Pronouns Table -->
+                    <TextBlock FontSize="20" Text="Personal Pronouns" FontWeight="Bold" Margin="20,20,0,10"/>
+                    <Grid Margin="0,0,0,20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock FontSize="18" Text="Я (ya)" Grid.Row="0" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="I" Grid.Row="0" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="The speaker themselves" Grid.Row="0" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Ты (ty)" Grid.Row="1" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="You (singular informal)" Grid.Row="1" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="Talking to one person informally" Grid.Row="1" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Он (on)" Grid.Row="2" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="He" Grid.Row="2" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="Referring to a male person or animal" Grid.Row="2" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Она (ona)" Grid.Row="3" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="She" Grid.Row="3" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="Referring to a female person or animal" Grid.Row="3" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Оно (ono)" Grid.Row="4" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="It" Grid.Row="4" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="Referring to a neuter object or animal" Grid.Row="4" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Мы (my)" Grid.Row="5" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="We" Grid.Row="5" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="Referring to the speaker and others" Grid.Row="5" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Вы (vy)" Grid.Row="6" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="You (plural or formal)" Grid.Row="6" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="Talking to one person formally or to a group" Grid.Row="6" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Они (oni)" Grid.Row="7" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="They" Grid.Row="7" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="Referring to a group of people or things" Grid.Row="7" Grid.Column="2"/>
+                    </Grid>
+
+                    <!-- Examples -->
+                    <TextBlock FontSize="20" Text="Examples" FontWeight="Bold" Margin="20,20,0,10"/>
+                    <TextBlock FontSize="18" TextWrapping="Wrap" Margin="0,0,0,10">
+                Here are some example sentences using personal pronouns in Russian:
+                    </TextBlock>
+                    <TextBlock FontSize="18" Margin="10,0,0,0">1. Я читаю книгу. (Ya chitayu knigu) - I am reading a book.</TextBlock>
+                    <TextBlock FontSize="18" Margin="10,0,0,0">2. Ты пишешь письмо. (Ty pishesh' pis'mo) - You are writing a letter.</TextBlock>
+                    <TextBlock FontSize="18" Margin="10,0,0,0">3. Он играет в футбол. (On igrayet v futbol) - He is playing football.</TextBlock>
+                    <TextBlock FontSize="18" Margin="10,0,0,0">4. Она смотрит телевизор. (Ona smotrit televizor) - She is watching TV.</TextBlock>
+                    <TextBlock FontSize="18" Margin="10,0,0,0">5. Оно светит. (Ono svetit) - It is shining.</TextBlock>
+                    <TextBlock FontSize="18" Margin="10,0,0,0">6. Мы идём в парк. (My idyom v park) - We are going to the park.</TextBlock>
+                    <TextBlock FontSize="18" Margin="10,0,0,0">7. Вы учите русский язык. (Vy uchite russkiy yazyk) - You are learning Russian.</TextBlock>
+                    <TextBlock FontSize="18" Margin="10,0,0,0">8. Они работают. (Oni rabotayut) - They are working.</TextBlock>
+
+                    <!-- Conclusion -->
+                    <TextBlock FontSize="20" Text="Conclusion" FontWeight="Bold" Margin="20,20,0,10"/>
+                    <TextBlock FontSize="18" TextWrapping="Wrap" Margin="0,0,0,20">
+                In this lesson, you have learned about the personal pronouns in Russian and how to use them in sentences. Practice these pronouns and try making your own sentences to reinforce your learning.
+                    </TextBlock>
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!--Button It's done!-->
+                        <TextBlock x:Name="BtnItsDoneLess2" Text="It's done!"
+                        Grid.Row="0"
+                        Margin="0,20,0,20"
+            FontFamily="Silkscreen"
+            FontSize="30"
+            Foreground="Black"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Cursor="Hand" MouseDown="BtnItsDoneLess2_MouseDown" MouseEnter="BtnItsDoneLess2_MouseEnter" MouseLeave="BtnItsDoneLess2_MouseLeave"/>
+                    </Grid>
+
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+
+        <Grid x:Name="Lesson_1_CompoundSentences" Grid.Row="1" Grid.RowSpan="3" Background="AliceBlue" Visibility="Hidden">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" FontFamily="Josefin Sans">
+                <StackPanel Margin="20">
+                    <!-- Title -->
+                    <TextBlock FontSize="24" FontWeight="Bold" Text="Lesson 2: Compound Sentences in Russian" Margin="0,0,0,20" TextAlignment="Center"/>
+
+                    <!-- Introduction -->
+                    <TextBlock FontSize="20" Text="Introduction" FontWeight="Bold" Margin="0,0,0,10"/>
+                    <TextBlock FontSize="18" TextWrapping="Wrap">
+                In this lesson, you will learn about compound sentences in Russian. Compound sentences are used to combine two or more independent clauses into one sentence. Understanding how to form and use compound sentences is essential for expressing complex ideas and constructing more varied sentences in Russian.
+                    </TextBlock>
+
+                    <!-- Compound Sentences Explanation -->
+                    <TextBlock FontSize="20" Text="Compound Sentences" FontWeight="Bold" Margin="20,20,0,10"/>
+                    <TextBlock FontSize="18" TextWrapping="Wrap">
+                A compound sentence in Russian is formed by combining two or more independent clauses using coordinating conjunctions such as "и" (and), "но" (but), "или" (or), "также" (also), and "однако" (however). Each clause in a compound sentence can stand alone as a complete sentence.
+                    </TextBlock>
+
+                    <!-- Examples -->
+                    <TextBlock FontSize="20" Text="Examples" FontWeight="Bold" Margin="20,20,0,10"/>
+                    <TextBlock FontSize="18" TextWrapping="Wrap">
+                Here are some example sentences using compound sentences in Russian:
+                    </TextBlock>
+                    <TextBlock FontSize="18" Margin="10,0,0,0">1. Я читаю книгу, и мой брат играет в футбол. (Ya chitayu knigu, i moy brat igrayet v futbol) - I am reading a book, and my brother is playing football.</TextBlock>
+                    <TextBlock FontSize="18" Margin="10,0,0,0">2. Мы пошли в парк, но он был закрыт. (My poshli v park, no on byl zakryt) - We went to the park, but it was closed.</TextBlock>
+                    <TextBlock FontSize="18" Margin="10,0,0,0">3. Ты можешь взять эту книгу, или я возьму её. (Ty mozhesh' vzyat' etu knigu, ili ya voz'mu yeyo) - You can take this book, or I will take it.</TextBlock>
+                    <TextBlock FontSize="18" Margin="10,0,0,0">4. Она любит читать, также она любит писать. (Ona lyubit chitat', takzhe ona lyubit pisat') - She loves to read, also she loves to write.</TextBlock>
+                    <TextBlock FontSize="18" Margin="10,0,0,0">5. Я хотел пойти в кино, однако я был слишком занят. (Ya khotel poyti v kino, odnako ya byl slishkom zanyat) - I wanted to go to the movies, however I was too busy.</TextBlock>
+
+                    <!-- Conjunctions Table -->
+                    <TextBlock FontSize="20" Text="Coordinating Conjunctions" FontWeight="Bold" Margin="20,20,0,10"/>
+                    <Grid Margin="0,0,0,20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="390"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock FontSize="18" Text="Conjunction" Grid.Row="0" Grid.Column="0" FontWeight="Bold"/>
+                        <TextBlock FontSize="18" Text="Russian" Grid.Row="0" Grid.Column="1" FontWeight="Bold"/>
+                        <TextBlock FontSize="18" Text="Example" Grid.Row="0" Grid.Column="2" FontWeight="Bold"/>
+
+                        <TextBlock FontSize="18" Text="And" Grid.Row="1" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="и" Grid.Row="1" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="Я читаю книгу, и мой брат играет в футбол." Grid.Row="1" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="But" Grid.Row="2" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="но" Grid.Row="2" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="Мы пошли в парк, но он был закрыт." Grid.Row="2" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Or" Grid.Row="3" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="или" Grid.Row="3" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="Ты можешь взять эту книгу, или я возьму её." Grid.Row="3" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="Also" Grid.Row="4" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="также" Grid.Row="4" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="Она любит читать, также она любит писать." Grid.Row="4" Grid.Column="2"/>
+
+                        <TextBlock FontSize="18" Text="However" Grid.Row="5" Grid.Column="0"/>
+                        <TextBlock FontSize="18" Text="однако" Grid.Row="5" Grid.Column="1"/>
+                        <TextBlock FontSize="18" Text="Я хотел пойти в кино, однако я был слишком занят." Grid.Row="5" Grid.Column="2"/>
+                    </Grid>
+
+                    <!-- Conclusion -->
+                    <TextBlock FontSize="20" Text="Conclusion" FontWeight="Bold" Margin="20,20,0,10"/>
+                    <TextBlock FontSize="18" TextWrapping="Wrap" Margin="0,0,0,20">
+                In this lesson, you have learned about compound sentences in Russian and how to use coordinating conjunctions to combine independent clauses. Practice creating your own compound sentences to improve your understanding and fluency.
+                    </TextBlock>
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!--Button It's done!-->
+                        <TextBlock x:Name="BtnItsDoneLess1El" Text="It's done!"
+                        Grid.Row="0"
+                        Margin="0,20,0,20"
+            FontFamily="Silkscreen"
+            FontSize="30"
+            Foreground="Black"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Cursor="Hand" MouseDown="BtnItsDoneLess1El_MouseDown" MouseEnter="BtnItsDoneLess1El_MouseEnter" MouseLeave="BtnItsDoneLess1El_MouseLeave"/>
+                    </Grid>
+
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+
+
+        <Grid x:Name="GifLoading" Grid.Row="0" Grid.RowSpan="4" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden" >
+            <Image x:Name="LoadingGifInStartForm" gif:ImageBehavior.AnimatedSource="Images/gifsend.gif" Width="50" Height="50" gif:ImageBehavior.AnimationSpeedRatio="1"/>
+        </Grid>
+    </Grid>
+</Window>
